@@ -4,6 +4,7 @@ public class Stopwatch {
 	
 	long[] startTimes;
 	long[] endTimes;
+	int i = 0;
 	
 	boolean highDef = true;
 	
