@@ -2,44 +2,61 @@ package edu.wmich.CS3310.HW3;
 
 public class Stopwatch {
 	
-	long[] startTimes;
-	long[] endTimes;
-	int i = 0;
-	int j = 1;
+	long[] startTime;
+	long[] elapsedTime;
+	boolean[] state;
 	
 	boolean highDef = true;
 	
 	Stopwatch() {
 		
-		startTimes = new long[10];
-		endTimes = new long[10];
+		startTime = new long[10];
+		elapsedTime = new long[10];
+		state = new boolean[10];
 		
 	}
 	
 	public void start(int timer) {
 		if(highDef) {
-			startTimes[timer] = System.nanoTime();
+			startTime[timer] = System.nanoTime();
 		} else {
-			startTimes[timer] = System.currentTimeMillis();
+			startTime[timer] = System.currentTimeMillis();
 		}
 		
-		endTimes[timer] = startTimes[timer];
+		state[timer] = true;
 		
 	}
 	
 	public long stop(int timer) {
 		if(highDef) {
-			endTimes[timer] = System.nanoTime();
+			elapsedTime[timer] += System.nanoTime() - startTime[timer];
 		} else {
-			endTimes[timer] = System.currentTimeMillis();
+			elapsedTime[timer] += System.currentTimeMillis() - startTime[timer];
 		}
 		
-		return getTime(timer);
+		state[timer] = false;
+		
+		return elapsedTime[timer];
+		
+	}
+	
+	public long reset(int timer) {
+		
+		long time = stop(timer);
+		elapsedTime[timer] = 0;
+		
+		return time;
 		
 	}
 	
 	public long getTime(int timer) {
-		return endTimes[timer] - startTimes[timer];
+		
+		if(state[timer]) {
+			return elapsedTime[timer] + (System.nanoTime() - startTime[timer]);
+		} else {
+			return elapsedTime[timer];
+		}
+		
 	}
 
 	
