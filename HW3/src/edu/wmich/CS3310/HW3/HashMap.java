@@ -86,7 +86,7 @@ public class HashMap<T> {
 			
 			k++;
 
-		} while (index != hash);
+		} while (k < m);
 
 		return -1;
 

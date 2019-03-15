@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class SearchEngine {
@@ -11,10 +12,13 @@ public class SearchEngine {
 	HashMap<String> map;
 	LinkedList<String> queryStack;
 	
+	Stopwatch timer = new Stopwatch();
 	
-	
-	
-
+	/**
+	 * Generates a Search engine object using an internal HashMap. 
+	 * The amount of unique keys is limited to the size of the map 
+	 * @param mapSize
+	 */
 	SearchEngine(int mapSize) {
 
 		map = new HashMap<String>(mapSize);
@@ -26,6 +30,8 @@ public class SearchEngine {
 	 * @param file
 	 */
 	public void readIndex(String file) {
+		
+		timer.start(0);		
 
 		File inFile = new File(file);
 		Scanner inScanner;
@@ -42,8 +48,10 @@ public class SearchEngine {
 
 		inScanner.close();
 		
+		timer.stop(0);
+		
 		System.out.println("Index Created from " + file);
-
+		System.out.println("took " + (double) timer.getTime(0)/1000000 + " ms");
 	}
 
 	/**
@@ -64,7 +72,11 @@ public class SearchEngine {
 		case "&&":
 		case "||":
 			iter = queryStack.iterator();
+			try {
 			return evalQuery(iter.next());
+			} catch(NoSuchElementException e) {
+				return null;
+			}
 
 		default:
 			return evalQuery(queryStack.getFirst());

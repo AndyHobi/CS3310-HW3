@@ -14,15 +14,18 @@ public class Main {
 		String input;
 		LinkedList<String> searchResult;
 
-		Stopwatch timer = new Stopwatch();
+		System.out.println(">Starting Search Engine<");
+		
+		if (args.length == 0) {
+			args = new String[1];
+			args[0] = "url.txt";
+		}
 
 		// reading input file
-		timer.start(0);
-		SE.readIndex("url.txt");
-		timer.stop(0);
+		SE.readIndex(args[0]);
 
+		
 		// start main loop
-
 		while (true) {
 			System.out.print(">");
 			input = kbd.nextLine().toLowerCase();
@@ -30,15 +33,20 @@ public class Main {
 			if (input.compareTo("!") == 0) {
 				break;
 			} else if (input.compareTo("?") == 0) {
-				
+
 				searchResult = SE.search();
 
-				if (searchResult.isEmpty()) {
-					System.out.println("No results found");
-				} else {
-					for (String result : searchResult) {
-						System.out.println(result);
+				if (searchResult != null) {
+
+					if (searchResult.isEmpty()) {
+						System.out.println("No results found");
+					} else {
+						for (String result : searchResult) {
+							System.out.println(result);
+						}
 					}
+				} else {
+					System.out.println("Invalid query sequence");
 				}
 
 			} else {
