@@ -1,6 +1,5 @@
 package edu.wmich.CS3310.HW3;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -9,41 +8,47 @@ public class Main {
 
 	public static void main(String[] args) throws FileNotFoundException {
 
-		HashMap<String> map = new HashMap<String>(100); 
-		
-		File inFile = new File("sample.txt");
-		Scanner inScanner = new Scanner(inFile);
-		
+		SearchEngine SE = new SearchEngine(1000000);
+
 		Scanner kbd = new Scanner(System.in);
 		String input;
 		LinkedList<String> searchResult;
-		while(inScanner.hasNextLine()) {
-			
-			map.add(inScanner.nextLine(), inScanner.nextLine().split(" "));
-			
-		}
-		
-		while(true) {
-			System.out.println("\nPlease enter your search term (or x to exit):");
-			input = kbd.nextLine();
-			
-			if(input.compareTo("x") == 0) {
+
+		Stopwatch timer = new Stopwatch();
+
+		// reading input file
+		timer.start(0);
+		SE.readIndex("url.txt");
+		timer.stop(0);
+
+		// start main loop
+
+		while (true) {
+			System.out.print(">");
+			input = kbd.nextLine().toLowerCase();
+
+			if (input.compareTo("!") == 0) {
 				break;
-			}
-			
-			searchResult = map.search(input);
-			
-			for(String result:searchResult) {
+			} else if (input.compareTo("?") == 0) {
 				
-				System.out.println(result);
-				
+				searchResult = SE.search();
+
+				if (searchResult.isEmpty()) {
+					System.out.println("No results found");
+				} else {
+					for (String result : searchResult) {
+						System.out.println(result);
+					}
+				}
+
+			} else {
+				SE.addQuery(input);
 			}
-			
+
 		}
-		
-		inScanner.close();
+
 		kbd.close();
-		
+
 	}
 
 }

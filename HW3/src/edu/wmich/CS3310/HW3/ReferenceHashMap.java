@@ -1,6 +1,6 @@
 package edu.wmich.CS3310.HW3;
 
-public class ReferenceHashMap extends HashMap{
+public class ReferenceHashMap extends HashMap<Integer>{
 
 	ReferenceHashMap(int mapSize) {
 		super(mapSize);
